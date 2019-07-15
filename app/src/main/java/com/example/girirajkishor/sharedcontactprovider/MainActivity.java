@@ -11,8 +11,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import java.util.Map;
 
-public class MainActivity <T> extends AppCompatActivity{  // this class will add data to sharedpreferences
-    public int cnt=0;  // for having different keys for sharedpreference
+public class MainActivity extends AppCompatActivity{  // this class will add data to sharedpreferences
+    public int cnt=0;                                   // for having different keys for sharedpreference
 
     public EditText etMain;
     public Button btnShare;
@@ -33,7 +33,7 @@ public class MainActivity <T> extends AppCompatActivity{  // this class will add
             public void onClick(View v) {
                 Toast.makeText(getBaseContext(), "New Contact Added", Toast.LENGTH_SHORT)
                         .show();
-                addName();
+                    addName();
                 Map<String, ?> map=  getPreferences(MODE_PRIVATE).getAll();
                 for (String key : map.keySet()){
                     Typed=Typed+map.get(key)+"\n";
@@ -49,14 +49,13 @@ public class MainActivity <T> extends AppCompatActivity{  // this class will add
             @Override
             public void onClick(View v) {
                 sendDataToProvider() // function that will set up the
-                                     // contentprovider and sends sharedpref's data
+                // contentprovider and sends sharedpref's data
                 ;
             }
         });
-
     }
 
-    public void addName() {  // storing data in sharedpreference
+    public void addName() {      // storing data in sharedpreference
         SharedPreferences sp1 = getPreferences(MODE_PRIVATE);
         SharedPreferences.Editor editor=sp1.edit();
         String name = etMain.getText().toString();
@@ -67,22 +66,18 @@ public class MainActivity <T> extends AppCompatActivity{  // this class will add
     public void sendDataToProvider(){
 
         ContentValues values = new ContentValues();
-        Map<String,T> mp= (Map<String, T>) getPreferences(MODE_PRIVATE).getAll(); // get all sharedpref's data so far
+        Map<String,?> mp=  getPreferences(MODE_PRIVATE).getAll(); // get all sharedpref's data so far
         for (String key : mp.keySet()){
                 values.put(ContactProvider.key,key);
                 if(mp.get(key) instanceof  Integer)
                     values.put((ContactProvider.value),(String)mp.get(key));
-            else if(mp.get(key) instanceof Boolean)
+                else if(mp.get(key) instanceof Boolean)
                 values.put(ContactProvider.value,(Boolean) mp.get(key));
-            else if(mp.get(key) instanceof Double)
+               else if(mp.get(key) instanceof Double)
                 values.put(ContactProvider.value,(Double) mp.get(key));
-            else
+               else
                 values.put(ContactProvider.value,(String)mp.get(key));
             getContentResolver().insert(ContactProvider.CONTENT_URL, values);
         }
-        SharedPreferences sp=getPreferences(MODE_PRIVATE);
-        SharedPreferences.Editor editor=sp.edit();
-        editor.clear();
-        editor.apply();
     }
 }
